@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class TrailerDto(
      @SerializedName("url")
-     val url: String,
+     val url: String?,
      @SerializedName("name")
-     val name: String,
+     val name: String?,
      @SerializedName("site")
-     val site: String,
+     val site: String?,
      @SerializedName("size")
-     val size: Int,
+     val size: Int?,
      @SerializedName("type")
-     val type: String
+     val type: String?
 )

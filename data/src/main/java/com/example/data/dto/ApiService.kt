@@ -1,7 +1,7 @@
 package com.example.data.dto
 
 import com.example.data.BuildConfig
-import com.example.data.dto.dtoModels.movieInfo.MoviesListDto
+import com.example.data.dto.dtoModels.movieInfo.MovieInfoDto
 import com.example.data.dto.dtoModels.moviesList.MoviesIdListDto
 import com.example.data.dto.dtoModels.reviews.ReviewListDto
 import retrofit2.http.GET
@@ -13,7 +13,7 @@ interface ApiService {
     @Headers(API_KEY)
     @GET("v1.4/movie?field=rating.kp&search=7-10&sortField=votes.kp&sortType=-1")
     suspend fun getTopMovies(
-        @Query(QUERY_PARAM_LIMIT) limit: Int = 30,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = 10,
         @Query(QUERY_PARAM_PAGE) page: Int = 1,
     ): MoviesIdListDto
 
@@ -21,12 +21,12 @@ interface ApiService {
     @GET("v1.4/movie/{id}")
     suspend fun getMoviesInfo(
         @Path(PATH_PARAM_ID) id: Int,
-    ): MoviesListDto
+    ): MovieInfoDto
 
     @Headers(API_KEY)
-    @GET("v1.4/review")
+    @GET("v1.4/reviews")
     suspend fun getReviews(
-        @Query(QUERY_PARAM_LIMIT) limit: Int = 30,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = 3,
         @Query(QUERY_PARAM_PAGE) page: Int = 1,
         @Query(QUERY_PARAM_MOVIE_ID) movieId: Int
     ): ReviewListDto

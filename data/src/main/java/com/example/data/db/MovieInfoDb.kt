@@ -8,13 +8,13 @@ import com.example.data.dto.dtoModels.movieInfo.RatingDto
 import com.example.data.dto.dtoModels.movieInfo.TrailersListDto
 
 @Entity("favourite_movies")
-data class MovieInfoModel(
+data class MovieInfoDb(
     @PrimaryKey
-    val id: Int,
-    val name: String,
+    val id: Int?,
+    val name: String?,
     val year: Int?,
     val description: String?,
-    @Embedded val rating: RatingDto,
-    @Embedded val poster: PosterDto,
+    @Embedded val rating: RatingDto?,
+    @Embedded val poster: PosterDto?,
     @Embedded val trailersList: TrailersListDto?,
 )

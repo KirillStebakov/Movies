@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class ReviewDto(
     @SerializedName("id")
-    val id: Int,
+    val id: Int?,
     @SerializedName("movieId")
-    val movieId: Int,
+    val movieId: Int?,
     @SerializedName("type")
-    val type: String,
-    @SerializedName("review")
-    val review: String,
+    val type: String?,
+    @SerializedName("reviews")
+    val review: String?,
     @SerializedName("date")
-    val date: String,
+    val date: String?,
     @SerializedName("author")
-    val author: String,
+    val author: String?,
 )

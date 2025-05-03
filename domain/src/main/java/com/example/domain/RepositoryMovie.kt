@@ -5,8 +5,12 @@ import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.domain.entity.reviews.Review
 
 interface RepositoryMovie {
-    fun getMoviesList(): LiveData<List<MovieInfo>>
-    fun getMovieInfo(): LiveData<MovieInfo>
-    fun getReviews(): LiveData<List<Review>>
-    fun loadData()
+   suspend fun getMoviesList(): List<MovieInfo>
+    fun getMovieInfo(id: Int): MovieInfo?
+    suspend fun getReviews(movieId: Int): List<Review>
+    fun addToFavorites()
+    fun removeFromFavorites()
+    fun fetchFavoritesList(): LiveData<List<MovieInfo>>
+    fun fetchFavoriteMovieDetails(): LiveData<MovieInfo>
+    fun fetchReviews(movieId: Int): LiveData<List<Review>>
 }

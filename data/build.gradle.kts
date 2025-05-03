@@ -52,6 +52,8 @@ dependencies {
 //    Dagger
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
+//    Kotlin reflection
+    implementation(libs.kotlin.reflect)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
