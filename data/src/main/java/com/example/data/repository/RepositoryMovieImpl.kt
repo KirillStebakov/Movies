@@ -1,27 +1,35 @@
 package com.example.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.data.dto.ApiFactory
+import com.example.data.dto.ApiFactory.apiService
 import com.example.data.dto.dtoModels.movieInfo.MovieInfoDto
 import com.example.domain.RepositoryMovie
 import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.domain.entity.reviews.Review
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class RepositoryMovieImpl() : RepositoryMovie {
+object RepositoryMovieImpl : RepositoryMovie {
     val apiServiceImpl = ApiFactory.apiService
     val mapper = MovieMapper()
+    private var currentPage = 0
     private val cachedData = mutableListOf<MovieInfoDto>()
-    override suspend fun getMoviesList(): List<MovieInfo> {
-        val topMovies = apiServiceImpl.getTopMovies()
-        Log.d("MainActivity", "$topMovies")
+    private val _moviesState = MutableStateFlow<List<MovieInfo>>(emptyList())
+    val moviesFlow: StateFlow<List<MovieInfo>> = _moviesState.asStateFlow()
+    override suspend fun getMoviesList() {
+        val nextPage = currentPage + 1
+        val topMovies = apiService.getTopMovies(page = nextPage)
         val ids = mapper.mapIdListToList(topMovies)
-        for (id in ids) {
-            val movieInfoDto = apiServiceImpl.getMoviesInfo(id)
-            Log.d("MainActivity", "$movieInfoDto")
-            cachedData.add(movieInfoDto)
+        ids.forEach { id ->
+            if (cachedData.none { it.id == id }) {
+                val movieInfoDto = apiService.getMoviesInfo(id)
+                cachedData.add(movieInfoDto)
+            }
         }
-        return cachedData.map { mapper.mapDToToEntity(it) }
+        currentPage = nextPage
+        _moviesState.value = cachedData.map { mapper.mapDToToEntity(it) }
     }
 
     override fun getMovieInfo(id: Int): MovieInfo? {
@@ -29,7 +37,7 @@ class RepositoryMovieImpl() : RepositoryMovie {
     }
 
     override suspend fun getReviews(movieId: Int): List<Review> {
-        val reviews = apiServiceImpl.getReviews(movieId=movieId).reviews.map {
+        val reviews = apiServiceImpl.getReviews(movieId = movieId).reviews.map {
             mapper.mapReviewDtoToEntity(it)
         }
         return reviews

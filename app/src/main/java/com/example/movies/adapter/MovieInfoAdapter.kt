@@ -30,7 +30,7 @@ class MovieInfoAdapter(private val context: Context) :
             with(movie) {
                 val ratingTemplate = context.resources.getString(R.string.movie_main_activity_rating)
                 val nameTemplate = context.resources.getString(R.string.movie_main_activity_name)
-                tvRating.text = String.format(ratingTemplate, rating?.kp.toString())
+                tvRating.text = String.format(ratingTemplate, "%.1f".format(rating?.kp))
                 tvName.text = String.format(nameTemplate, name)
                 Picasso.get().load(poster?.url).into(ivPoster)
                 root.setOnClickListener {

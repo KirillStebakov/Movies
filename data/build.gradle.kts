@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 val props = Properties().apply {
@@ -52,8 +53,6 @@ dependencies {
 //    Dagger
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)
-//    Kotlin reflection
-    implementation(libs.kotlin.reflect)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
