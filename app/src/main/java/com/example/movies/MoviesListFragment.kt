@@ -1,64 +1,62 @@
 package com.example.movies
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.cryptoapp.presentation.adapters.MovieInfoAdapter
+import com.example.movies.adapter.MovieInfoAdapter
+import com.example.movies.adapter.addOnEndlessScrollListener
 import com.example.movies.databinding.FragmentMoviesListBinding
-import com.example.movies.viewModels.MovieViewModelFactory
 import com.example.movies.viewModels.MoviesViewModel
 import com.example.movies.viewModels.State
 import kotlinx.coroutines.launch
 
 class MoviesListFragment :
     BaseFragment<FragmentMoviesListBinding>(FragmentMoviesListBinding::inflate) {
-    private var page = 1
-    private val viewModelFactory by lazy {
-        MovieViewModelFactory()
-    }
     private val viewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
+        ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
     }
+    private lateinit var adapter: MovieInfoAdapter
+    private lateinit var gridLayoutManager: GridLayoutManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState != null) {
-            page = savedInstanceState.getInt(PAGINATION_KEY, 0)
-        }
-        val adapter = MovieInfoAdapter(requireActivity())
+        adapter = MovieInfoAdapter(requireActivity())
         binding.rvMovieList.adapter = adapter
-        val gridLayoutManager = GridLayoutManager(requireActivity(), 2)
+        gridLayoutManager = GridLayoutManager(requireActivity(), 2)
         binding.rvMovieList.layoutManager = gridLayoutManager
         adapter.onMovieClickListener = {
             launchMovieDetailFragment(it.id)
         }
+
+        Log.d("Main", "$viewModel")
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.movies.collect {
                     when (it) {
-                        is State.Initial -> {
-
-                        }
-
                         is State.Loading -> {
-
+                            binding.progressBar.isVisible = true
                         }
 
                         is State.Content -> {
-
+                            binding.progressBar.isGone = true
                             adapter.submitList(it.movieList)
                         }
                     }
+
                 }
             }
         }
-        /* binding.rvMovieList.addOnEndlessScrollListener(gridLayoutManager) {
+         binding.rvMovieList.addOnEndlessScrollListener(gridLayoutManager) {
              viewModel.loadMovieList()
-         }*/
+         }
     }
 
     private fun launchMovieDetailFragment(id: Int?) {
@@ -69,15 +67,5 @@ class MoviesListFragment :
             )
             .addToBackStack(null)
             .commit()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val myNumber = page
-        outState.putInt(PAGINATION_KEY, myNumber)
-    }
-
-    companion object {
-        private const val PAGINATION_KEY = "PaginationKey"
     }
 }

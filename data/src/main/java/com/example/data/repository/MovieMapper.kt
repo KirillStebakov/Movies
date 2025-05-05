@@ -19,6 +19,7 @@ class MovieMapper {
     fun mapDToToEntity(dto: MovieInfoDto): MovieInfo = MovieInfo(
         id = dto.id,
         name = dto.name,
+        alternativeName = dto.alternativeName,
         year = dto.year,
         description = dto.description,
         rating = dto.rating?.toEntity(),
@@ -38,6 +39,7 @@ class MovieMapper {
     fun mapDToToDbModel(dto: MovieInfoDto): MovieInfoDb = MovieInfoDb(
         id = dto.id,
         name = dto.name,
+        alternativeName = dto.alternativeName,
         year = dto.year,
         description = dto.description,
         rating = dto.rating,
@@ -48,6 +50,7 @@ class MovieMapper {
     fun mapDbModelToEntity(dbModel: MovieInfoDb): MovieInfo = MovieInfo(
         id = dbModel.id,
         name = dbModel.name,
+        alternativeName = dbModel.alternativeName,
         year = dbModel.year,
         description = dbModel.description,
         rating = dbModel.rating?.toEntity(),

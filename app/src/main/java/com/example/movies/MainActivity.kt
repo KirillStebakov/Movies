@@ -12,7 +12,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        launchMoviesListFragment()
+        if (savedInstanceState == null) {
+            launchMoviesListFragment()
+        }
     }
     private fun launchMoviesListFragment() {
         supportFragmentManager.beginTransaction()
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.fragment_container_movie_detail,
                 MoviesListFragment()
             )
+            .addToBackStack(null)
             .commit()
     }
 }

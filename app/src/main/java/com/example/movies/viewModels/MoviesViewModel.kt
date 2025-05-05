@@ -29,9 +29,7 @@ class MoviesViewModel() : ViewModel() {
     }
 
     init {
-        if (repositoryMovie.moviesFlow.value.isEmpty()) {
-            loadMovieList()
-        }
+        loadMovieList()
     }
     fun getMovieInfo(id: Int): MovieInfo? = getMovieInfoUseCase(id)
 }

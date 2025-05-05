@@ -1,4 +1,4 @@
-package com.example.cryptoapp.presentation.adapters
+package com.example.movies.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -28,13 +28,21 @@ class MovieInfoAdapter(private val context: Context) :
         val movie = getItem(position)
         with(holder.binding) {
             with(movie) {
-                val ratingTemplate = context.resources.getString(R.string.movie_main_activity_rating)
-                val nameTemplate = context.resources.getString(R.string.movie_main_activity_name)
+                val ratingTemplate =
+                    context.resources.getString(R.string.movie_main_activity_rating)
                 tvRating.text = String.format(ratingTemplate, "%.1f".format(rating?.kp))
-                tvName.text = String.format(nameTemplate, name)
-                Picasso.get().load(poster?.url).into(ivPoster)
+                val color = when {
+                    (rating?.kp ?: 0.0) <= 4.0 -> R.color.red
+                    (rating?.kp ?: 0.0) <= 7 -> R.color.yellow
+                    else -> R.color.green
+                }
+                tvRating.setRoundedBackgroundColor(color)
+
+                poster?.url?.let { Picasso.get().load(it).into(ivPoster) }
+                    ?: ivPoster.setImageResource(R.drawable.empty_poster)
+
                 root.setOnClickListener {
-                    onMovieClickListener?.invoke(movie)
+                    onMovieClickListener?.invoke(this)
                 }
             }
         }

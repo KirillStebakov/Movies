@@ -1,4 +1,4 @@
-package com.example.cryptoapp.presentation.adapters
+package com.example.movies.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.domain.entity.movieInfo.MovieInfo

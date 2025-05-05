@@ -11,9 +11,9 @@ import retrofit2.http.Query
 
 interface ApiService {
     @Headers(API_KEY)
-    @GET("v1.4/movie?field=rating.kp&search=7-10&sortField=votes.kp&sortType=-1")
+    @GET("v1.4/movie?field=rating.kp&search=0-10&sortField=votes.kp&sortType=1")
     suspend fun getTopMovies(
-        @Query(QUERY_PARAM_LIMIT) limit: Int = 1,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = 10,
         @Query(QUERY_PARAM_PAGE) page: Int,
     ): MoviesIdListDto
 

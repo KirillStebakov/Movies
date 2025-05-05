@@ -1,7 +1,6 @@
 package com.example.data.repository
 
 import androidx.lifecycle.LiveData
-import com.example.data.dto.ApiFactory
 import com.example.data.dto.ApiFactory.apiService
 import com.example.data.dto.dtoModels.movieInfo.MovieInfoDto
 import com.example.domain.RepositoryMovie
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 object RepositoryMovieImpl : RepositoryMovie {
-    val apiServiceImpl = ApiFactory.apiService
     val mapper = MovieMapper()
     private var currentPage = 0
     private val cachedData = mutableListOf<MovieInfoDto>()
@@ -31,13 +29,12 @@ object RepositoryMovieImpl : RepositoryMovie {
         currentPage = nextPage
         _moviesState.value = cachedData.map { mapper.mapDToToEntity(it) }
     }
-
     override fun getMovieInfo(id: Int): MovieInfo? {
         return cachedData.find { it.id == id }?.let { mapper.mapDToToEntity(it) }
     }
 
     override suspend fun getReviews(movieId: Int): List<Review> {
-        val reviews = apiServiceImpl.getReviews(movieId = movieId).reviews.map {
+        val reviews = apiService.getReviews(movieId = movieId).reviews.map {
             mapper.mapReviewDtoToEntity(it)
         }
         return reviews

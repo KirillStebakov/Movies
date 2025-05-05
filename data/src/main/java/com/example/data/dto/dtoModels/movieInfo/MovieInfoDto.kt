@@ -7,6 +7,8 @@ data class MovieInfoDto(
     val id: Int?,
     @SerializedName("name")
     val name: String?,
+    @SerializedName("alternativeName")
+    val alternativeName: String?,
     @SerializedName("year")
     val year: Int?,
     @SerializedName("description")
