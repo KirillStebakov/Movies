@@ -3,6 +3,7 @@ package com.example.data.repository
 import androidx.lifecycle.LiveData
 import com.example.data.dto.ApiFactory.apiService
 import com.example.data.dto.dtoModels.movieInfo.MovieInfoDto
+import com.example.data.dto.dtoModels.reviews.ReviewDto
 import com.example.domain.RepositoryMovie
 import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.domain.entity.reviews.Review
@@ -12,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 object RepositoryMovieImpl : RepositoryMovie {
     val mapper = MovieMapper()
+
     private var currentPage = 0
     private val cachedData = mutableListOf<MovieInfoDto>()
     private val _moviesState = MutableStateFlow<List<MovieInfo>>(emptyList())
@@ -29,15 +31,22 @@ object RepositoryMovieImpl : RepositoryMovie {
         currentPage = nextPage
         _moviesState.value = cachedData.map { mapper.mapDToToEntity(it) }
     }
+
     override fun getMovieInfo(id: Int): MovieInfo? {
         return cachedData.find { it.id == id }?.let { mapper.mapDToToEntity(it) }
     }
 
-    override suspend fun getReviews(movieId: Int): List<Review> {
-        val reviews = apiService.getReviews(movieId = movieId).reviews.map {
-            mapper.mapReviewDtoToEntity(it)
+    private var currentReviewPage = 0
+    private val cachedReview = mutableListOf<ReviewDto>()
+    private val _reviewsState = MutableStateFlow<List<Review>>(emptyList())
+    val reviewFlow: StateFlow<List<Review>> = _reviewsState.asStateFlow()
+    override suspend fun getReviews(movieId: Int) {
+        val nextPage = currentReviewPage + 1
+        apiService.getReviews(movieId = movieId, page = nextPage).reviews.forEach {
+            cachedReview.add(it)
         }
-        return reviews
+        currentReviewPage = nextPage
+        _reviewsState.value = cachedReview.map { mapper.mapReviewDtoToEntity(it) }
     }
 
     override fun addToFavorites() {

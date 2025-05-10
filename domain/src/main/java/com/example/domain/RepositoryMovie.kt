@@ -7,7 +7,7 @@ import com.example.domain.entity.reviews.Review
 interface RepositoryMovie {
     suspend fun getMoviesList()
     fun getMovieInfo(id: Int): MovieInfo?
-    suspend fun getReviews(movieId: Int): List<Review>
+    suspend fun getReviews(movieId: Int)
     fun addToFavorites()
     fun removeFromFavorites()
     fun fetchFavoritesList(): LiveData<List<MovieInfo>>

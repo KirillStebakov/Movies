@@ -9,7 +9,7 @@ data class ReviewDto(
     val movieId: Int?,
     @SerializedName("type")
     val type: String?,
-    @SerializedName("reviews")
+    @SerializedName("review")
     val review: String?,
     @SerializedName("date")
     val date: String?,

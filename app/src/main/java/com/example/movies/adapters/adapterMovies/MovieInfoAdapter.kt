@@ -1,6 +1,5 @@
-package com.example.movies.adapter
+package com.example.movies.adapters.adapterMovies
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -9,7 +8,7 @@ import com.example.movies.R
 import com.example.movies.databinding.ItemMovieBinding
 import com.squareup.picasso.Picasso
 
-class MovieInfoAdapter(private val context: Context) :
+class MovieInfoAdapter() :
     ListAdapter<MovieInfo, MovieInfoViewHolder>(MovieInfoDiffCallback()) {
 
     var onMovieClickListener: ((MovieInfo) -> Unit)? = null
@@ -28,9 +27,7 @@ class MovieInfoAdapter(private val context: Context) :
         val movie = getItem(position)
         with(holder.binding) {
             with(movie) {
-                val ratingTemplate =
-                    context.resources.getString(R.string.movie_main_activity_rating)
-                tvRating.text = String.format(ratingTemplate, "%.1f".format(rating?.kp))
+                tvRating.text = String.format("%.1f".format(rating?.kp))
                 val color = when {
                     (rating?.kp ?: 0.0) <= 4.0 -> R.color.red
                     (rating?.kp ?: 0.0) <= 7 -> R.color.yellow

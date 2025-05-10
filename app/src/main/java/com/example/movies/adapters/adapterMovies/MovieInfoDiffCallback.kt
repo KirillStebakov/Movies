@@ -1,4 +1,4 @@
-package com.example.movies.adapter
+package com.example.movies.adapters.adapterMovies
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.domain.entity.movieInfo.MovieInfo

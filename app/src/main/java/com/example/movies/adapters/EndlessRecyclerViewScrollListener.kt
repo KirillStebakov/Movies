@@ -1,11 +1,11 @@
-package com.example.movies.adapter
+package com.example.movies.adapters
 
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 fun RecyclerView.addOnEndlessScrollListener(
-    layoutManager: GridLayoutManager,
-    visibleThreshold: Int = 5,
+    layoutManager: LinearLayoutManager,
+    visibleThreshold: Int = 6,
     onLoadMore: (page: Int) -> Unit
 ) {
     var currentPage = 1
