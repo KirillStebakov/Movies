@@ -8,9 +8,8 @@ interface RepositoryMovie {
     suspend fun getMoviesList()
     fun getMovieInfo(id: Int): MovieInfo?
     suspend fun getReviews(movieId: Int)
-    fun addToFavorites()
-    fun removeFromFavorites()
-    fun fetchFavoritesList(): LiveData<List<MovieInfo>>
-    fun fetchFavoriteMovieDetails(): LiveData<MovieInfo>
-    fun fetchReviews(movieId: Int): LiveData<List<Review>>
+    suspend fun addToFavorites(movieInfo: MovieInfo?)
+    suspend fun removeFromFavorites(movieInfo: MovieInfo?)
+    fun fetchFavoritesList(): LiveData<List<MovieInfo?>>
+    fun fetchFavoriteMovieDetails(id: Int): LiveData<MovieInfo?>
 }

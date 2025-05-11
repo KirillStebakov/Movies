@@ -6,8 +6,11 @@ import androidx.room.PrimaryKey
 import com.example.data.dto.dtoModels.movieInfo.PosterDto
 import com.example.data.dto.dtoModels.movieInfo.RatingDto
 import com.example.data.dto.dtoModels.movieInfo.TrailersListDto
+import com.example.domain.entity.movieInfo.Poster
+import com.example.domain.entity.movieInfo.Rating
+import com.example.domain.entity.movieInfo.Trailer
 
-@Entity("favourite_movies")
+@Entity(tableName = "favourite_movies")
 data class MovieInfoDb(
     @PrimaryKey
     val id: Int?,
@@ -15,7 +18,6 @@ data class MovieInfoDb(
     val alternativeName: String?,
     val year: Int?,
     val description: String?,
-    @Embedded val rating: RatingDto?,
-    @Embedded val poster: PosterDto?,
-    @Embedded val trailersList: TrailersListDto?,
+    @Embedded val rating: Rating?,
+    @Embedded val poster: Poster?,
 )

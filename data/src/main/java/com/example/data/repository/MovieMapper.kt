@@ -36,27 +36,27 @@ class MovieMapper {
         author = reviewDto.author
     )
 
-    fun mapDToToDbModel(dto: MovieInfoDto): MovieInfoDb = MovieInfoDb(
-        id = dto.id,
-        name = dto.name,
-        alternativeName = dto.alternativeName,
-        year = dto.year,
-        description = dto.description,
-        rating = dto.rating,
-        poster = dto.poster,
-        trailersList = dto.trailersList
+    fun mapEntityToDbModel(movie: MovieInfo?): MovieInfoDb = MovieInfoDb(
+        id = movie?.id,
+        name = movie?.name,
+        alternativeName = movie?.alternativeName,
+        year = movie?.year,
+        description = movie?.description,
+        rating = movie?.rating,
+        poster = movie?.poster,
     )
 
-    fun mapDbModelToEntity(dbModel: MovieInfoDb): MovieInfo = MovieInfo(
-        id = dbModel.id,
-        name = dbModel.name,
-        alternativeName = dbModel.alternativeName,
-        year = dbModel.year,
-        description = dbModel.description,
-        rating = dbModel.rating?.toEntity(),
-        poster = dbModel.poster?.toEntity(),
-        trailersList = dbModel.trailersList?.trailers?.toEntity()
+    fun mapDbModelToEntity(dbModel: MovieInfoDb?): MovieInfo? = MovieInfo(
+        id = dbModel?.id,
+        name = dbModel?.name,
+        alternativeName = dbModel?.alternativeName,
+        year = dbModel?.year,
+        description = dbModel?.description,
+        rating = dbModel?.rating?.toEntity(),
+        poster = dbModel?.poster?.toEntity(),
     )
+    fun mapListDbModelToListEntity(list: List<MovieInfoDb>): List<MovieInfo?> = list.map {mapDbModelToEntity(it)}
+
 
     fun List<TrailerDto>.toEntity(): List<Trailer> {
         return this.map {
@@ -77,6 +77,14 @@ class MovieMapper {
     )
 
     fun PosterDto?.toEntity(): Poster? = Poster(
+        url = this?.url ?: "",
+        previewUrl = this?.previewUrl ?: ""
+    )
+    fun Rating?.toEntity(): Rating? = Rating(
+        kp = this?.kp ?: 0.0
+    )
+
+    fun Poster?.toEntity(): Poster? = Poster(
         url = this?.url ?: "",
         previewUrl = this?.previewUrl ?: ""
     )

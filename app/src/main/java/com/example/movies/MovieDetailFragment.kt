@@ -2,7 +2,9 @@ package com.example.movies
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.Lifecycle
@@ -62,6 +64,30 @@ class MovieDetailFragment :
             val child = v.getChildAt(v.childCount - 1) ?: return@setOnScrollChangeListener
             if (scrollY >= (child.measuredHeight - v.measuredHeight) && scrollY > oldScrollY) {
                 viewModel.loadReviewList(id)
+            }
+        }
+        viewModel.fetchMovieDetails(id).observe(viewLifecycleOwner) {
+            (Log.d("Main", "$it"))
+            if (it?.id != null) {
+                binding.imageViewStar.setOnClickListener {view ->
+                    viewModel.removeFromFavorites(data)
+                }
+                binding.imageViewStar.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        android.R.drawable.star_big_on
+                    )
+                )
+            } else {
+                binding.imageViewStar.setOnClickListener {view ->
+                    viewModel.addToFavorites(data)
+                }
+                binding.imageViewStar.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        android.R.drawable.star_big_off
+                    )
+                )
             }
         }
     }

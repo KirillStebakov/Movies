@@ -48,13 +48,12 @@ class MoviesListFragment :
                             adapter.submitList(it.movieList)
                         }
                     }
-
                 }
             }
         }
-         binding.rvMovieList.addOnEndlessScrollListener(gridLayoutManager) {
+        /* binding.rvMovieList.addOnEndlessScrollListener(gridLayoutManager) {
              viewModel.loadMovieList()
-         }
+         }*/
     }
 
     private fun setupRecyclers(){

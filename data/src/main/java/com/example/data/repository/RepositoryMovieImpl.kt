@@ -1,6 +1,9 @@
 package com.example.data.repository
 
+import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.map
+import com.example.data.db.AppDatabase
 import com.example.data.dto.ApiFactory.apiService
 import com.example.data.dto.dtoModels.movieInfo.MovieInfoDto
 import com.example.data.dto.dtoModels.reviews.ReviewDto
@@ -11,8 +14,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-object RepositoryMovieImpl : RepositoryMovie {
-    val mapper = MovieMapper()
+class RepositoryMovieImpl(application: Application) : RepositoryMovie {
+    private val mapper = MovieMapper()
+    private val movieInfoDao = AppDatabase.getInstance(application).movieInfoDao()
 
     private var currentPage = 0
     private val cachedData = mutableListOf<MovieInfoDto>()
@@ -49,23 +53,19 @@ object RepositoryMovieImpl : RepositoryMovie {
         _reviewsState.value = cachedReview.map { mapper.mapReviewDtoToEntity(it) }
     }
 
-    override fun addToFavorites() {
-        TODO("Not yet implemented")
+    override suspend fun addToFavorites(movie: MovieInfo?) {
+        movieInfoDao.insertMovieToFavorite(mapper.mapEntityToDbModel(movie))
     }
 
-    override fun removeFromFavorites() {
-        TODO("Not yet implemented")
+    override suspend fun removeFromFavorites(movie: MovieInfo?) {
+        movieInfoDao.deleteMovieFromFavorite(movie?.id)
     }
 
-    override fun fetchFavoritesList(): LiveData<List<MovieInfo>> {
-        TODO("Not yet implemented")
+    override fun fetchFavoritesList(): LiveData<List<MovieInfo?>> {
+        return movieInfoDao.getFavoriteMovieList().map { mapper.mapListDbModelToListEntity(it) }
     }
 
-    override fun fetchFavoriteMovieDetails(): LiveData<MovieInfo> {
-        TODO("Not yet implemented")
-    }
-
-    override fun fetchReviews(movieId: Int): LiveData<List<Review>> {
-        TODO("Not yet implemented")
+    override fun fetchFavoriteMovieDetails(id: Int): LiveData<MovieInfo?> {
+        return movieInfoDao.getFavoriteMovie(id).map { mapper.mapDbModelToEntity(it) }
     }
 }

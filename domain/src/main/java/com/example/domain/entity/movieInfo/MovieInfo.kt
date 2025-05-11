@@ -8,5 +8,5 @@ data class MovieInfo(
     val description: String?,
     val rating: Rating?,
     val poster: Poster?,
-    val trailersList: List<Trailer>?,
+    val trailersList: List<Trailer>? = null,
 )
