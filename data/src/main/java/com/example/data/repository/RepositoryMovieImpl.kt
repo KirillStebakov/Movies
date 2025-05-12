@@ -65,7 +65,11 @@ class RepositoryMovieImpl(application: Application) : RepositoryMovie {
         return movieInfoDao.getFavoriteMovieList().map { mapper.mapListDbModelToListEntity(it) }
     }
 
-    override fun fetchFavoriteMovieDetails(id: Int): LiveData<MovieInfo?> {
-        return movieInfoDao.getFavoriteMovie(id).map { mapper.mapDbModelToEntity(it) }
+    override suspend fun fetchFavoriteMovieDetails(id: Int): MovieInfo? {
+        return movieInfoDao.getFavoriteMovie(id).let { mapper.mapDbModelToEntity(it) }
+    }
+
+    override fun checkingIsFavorite(id: Int): LiveData<Boolean> {
+        return movieInfoDao.isFavorite(id)
     }
 }

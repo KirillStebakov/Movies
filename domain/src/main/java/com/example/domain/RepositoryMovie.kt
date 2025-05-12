@@ -2,7 +2,6 @@ package com.example.domain
 
 import androidx.lifecycle.LiveData
 import com.example.domain.entity.movieInfo.MovieInfo
-import com.example.domain.entity.reviews.Review
 
 interface RepositoryMovie {
     suspend fun getMoviesList()
@@ -11,5 +10,6 @@ interface RepositoryMovie {
     suspend fun addToFavorites(movieInfo: MovieInfo?)
     suspend fun removeFromFavorites(movieInfo: MovieInfo?)
     fun fetchFavoritesList(): LiveData<List<MovieInfo?>>
-    fun fetchFavoriteMovieDetails(id: Int): LiveData<MovieInfo?>
+    suspend fun fetchFavoriteMovieDetails(id: Int): MovieInfo?
+    fun checkingIsFavorite(id: Int): LiveData<Boolean>
 }

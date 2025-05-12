@@ -27,5 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
     }
+
     abstract fun movieInfoDao(): MovieInfoDao
 }

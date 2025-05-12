@@ -23,13 +23,26 @@ class ReviewAdapter() :
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
         val data = getItem(position)
         val backgroundColor = when (data.type) {
-            POSITIVE -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_green_light)
-            NEGATIVE -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_red_light)
-            NEUTRAL -> ContextCompat.getColor(holder.itemView.context, android.R.color.holo_orange_light)
+            POSITIVE -> ContextCompat.getColor(
+                holder.itemView.context,
+                android.R.color.holo_green_light
+            )
+
+            NEGATIVE -> ContextCompat.getColor(
+                holder.itemView.context,
+                android.R.color.holo_red_light
+            )
+
+            NEUTRAL -> ContextCompat.getColor(
+                holder.itemView.context,
+                android.R.color.holo_orange_light
+            )
+
             else -> throw RuntimeException("Unknown type: ${data.type}")
         }
         holder.bind(data, backgroundColor)
     }
+
     companion object {
         const val POSITIVE = "Позитивный"
         const val NEGATIVE = "Негативный"

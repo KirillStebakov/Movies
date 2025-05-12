@@ -13,7 +13,7 @@ interface ApiService {
     @Headers(API_KEY)
     @GET("v1.4/movie?field=rating.kp&search=0-10&sortField=votes.kp&sortType=-1")
     suspend fun getTopMovies(
-        @Query(QUERY_PARAM_LIMIT) limit: Int = 1,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = 10,
         @Query(QUERY_PARAM_PAGE) page: Int,
     ): MoviesIdListDto
 
@@ -26,7 +26,7 @@ interface ApiService {
     @Headers(API_KEY)
     @GET("v1.4/review")
     suspend fun getReviews(
-        @Query(QUERY_PARAM_LIMIT) limit: Int = 2,
+        @Query(QUERY_PARAM_LIMIT) limit: Int = 4,
         @Query(QUERY_PARAM_PAGE) page: Int,
         @Query(QUERY_PARAM_MOVIE_ID) movieId: Int
     ): ReviewListDto

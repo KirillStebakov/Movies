@@ -51,17 +51,18 @@ class MoviesListFragment :
                 }
             }
         }
-        /* binding.rvMovieList.addOnEndlessScrollListener(gridLayoutManager) {
-             viewModel.loadMovieList()
-         }*/
+        binding.rvMovieList.addOnEndlessScrollListener(gridLayoutManager) {
+            viewModel.loadMovieList()
+        }
     }
 
-    private fun setupRecyclers(){
+    private fun setupRecyclers() {
         adapter = MovieInfoAdapter()
         binding.rvMovieList.adapter = adapter
         gridLayoutManager = GridLayoutManager(requireActivity(), 2)
         binding.rvMovieList.layoutManager = gridLayoutManager
     }
+
     private fun launchMovieDetailFragment(id: Int?) {
         requireActivity().supportFragmentManager.beginTransaction()
             .replace(

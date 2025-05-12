@@ -24,9 +24,11 @@ class RoundedTextView @JvmOverloads constructor(
         )
         background = backgroundDrawable
     }
+
     fun setRoundedBackgroundColor(@ColorRes colorResId: Int) {
         backgroundDrawable.setColor(ContextCompat.getColor(context, colorResId))
     }
+
     override fun onMeasure(widthSpec: Int, heightSpec: Int) {
         super.onMeasure(widthSpec, heightSpec)
         val size = min(measuredWidth, measuredHeight)

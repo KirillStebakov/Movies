@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.movies.databinding.FragmentFavoriteMovieDetailBinding
 import com.example.movies.viewModels.FavoriteMoviesViewModel
 import com.squareup.picasso.Picasso
@@ -13,10 +14,16 @@ class FavoriteMovieDetailFragment : BaseFragment<FragmentFavoriteMovieDetailBind
     private val viewModel by lazy {
         ViewModelProvider(requireActivity())[FavoriteMoviesViewModel::class.java]
     }
+    private var movieInfo: MovieInfo? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = parseArgs()
-        viewModel.favoriteMovieDetails(id).observe(viewLifecycleOwner) {
+        viewModel.isInvoked.observe(viewLifecycleOwner) {
+            if (it) {
+                viewModel.fetchDetails(id)
+            }
+        }
+        viewModel.movieDetails.observe(viewLifecycleOwner) {
             with(binding) {
                 with(it) {
                     Picasso.get().load(this?.poster?.url).into(ivPoster)
@@ -24,27 +31,30 @@ class FavoriteMovieDetailFragment : BaseFragment<FragmentFavoriteMovieDetailBind
                     tvYear.text = this?.year.toString()
                     tvDescription.text = this?.description
                 }
-                if (it?.id != null) {
-                    imageViewStar.setOnClickListener {view ->
-                        viewModel.removeFromFavorites(it)
-                    }
-                    imageViewStar.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireActivity(),
-                            android.R.drawable.star_big_on
-                        )
-                    )
-                } else {
-                    imageViewStar.setOnClickListener {view ->
-                        viewModel.addToFavorites(it)
-                    }
-                    imageViewStar.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            requireActivity(),
-                            android.R.drawable.star_big_off
-                        )
-                    )
+            }
+            movieInfo = it
+        }
+        viewModel.isFavorite(id).observe(viewLifecycleOwner) { state ->
+            if (state) {
+                binding.imageViewStar.setOnClickListener { view ->
+                    viewModel.removeFromFavorites(movieInfo)
                 }
+                binding.imageViewStar.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        android.R.drawable.star_big_on
+                    )
+                )
+            } else {
+                binding.imageViewStar.setOnClickListener { view ->
+                    viewModel.addToFavorites(movieInfo)
+                }
+                binding.imageViewStar.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        requireActivity(),
+                        android.R.drawable.star_big_off
+                    )
+                )
             }
         }
     }

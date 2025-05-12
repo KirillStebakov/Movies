@@ -55,7 +55,9 @@ class MovieMapper {
         rating = dbModel?.rating?.toEntity(),
         poster = dbModel?.poster?.toEntity(),
     )
-    fun mapListDbModelToListEntity(list: List<MovieInfoDb>): List<MovieInfo?> = list.map {mapDbModelToEntity(it)}
+
+    fun mapListDbModelToListEntity(list: List<MovieInfoDb>): List<MovieInfo?> =
+        list.map { mapDbModelToEntity(it) }
 
 
     fun List<TrailerDto>.toEntity(): List<Trailer> {
@@ -80,6 +82,7 @@ class MovieMapper {
         url = this?.url ?: "",
         previewUrl = this?.previewUrl ?: ""
     )
+
     fun Rating?.toEntity(): Rating? = Rating(
         kp = this?.kp ?: 0.0
     )

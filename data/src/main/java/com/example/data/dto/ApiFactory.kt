@@ -8,11 +8,14 @@ object ApiFactory {
     private const val BASE_URL = "https://api.kinopoisk.dev/"
 
     private val retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
-            .setLenient()
-            .create()))
+        .addConverterFactory(
+            GsonConverterFactory.create(
+                GsonBuilder()
+                    .create()
+            )
+        )
         .baseUrl(BASE_URL)
         .build()
 
-    val apiService = retrofit.create(ApiService::class.java)
+    val apiService: ApiService = retrofit.create(ApiService::class.java)
 }

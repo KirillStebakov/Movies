@@ -24,7 +24,8 @@ class FavoriteMoviesListFragment : BaseFragment<FragmentMoviesListBinding>
             adapter.submitList(it)
         }
     }
-    private fun setupRecyclers(){
+
+    private fun setupRecyclers() {
         adapter = MovieInfoAdapter()
         binding.rvMovieList.adapter = adapter
         gridLayoutManager = GridLayoutManager(requireActivity(), 2)

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.movies.databinding.ActivityFavoriteMoviesBinding
-import com.example.movies.databinding.ActivityMainBinding
 
 class FavoriteMoviesActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -19,6 +18,7 @@ class FavoriteMoviesActivity : AppCompatActivity() {
             launchMoviesListFragment()
         }
     }
+
     private fun launchMoviesListFragment() {
         supportFragmentManager.beginTransaction()
             .replace(
@@ -27,6 +27,7 @@ class FavoriteMoviesActivity : AppCompatActivity() {
             )
             .commit()
     }
+
     companion object {
         fun newIntent(context: Context): Intent {
             return Intent(context, FavoriteMoviesActivity::class.java)

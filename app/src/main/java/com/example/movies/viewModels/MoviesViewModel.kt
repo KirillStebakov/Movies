@@ -9,7 +9,7 @@ import com.example.data.repository.RepositoryMovieImpl
 import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.domain.entity.reviews.Review
 import com.example.domain.useCases.AddToFavoritesUseCase
-import com.example.domain.useCases.FetchFavoriteMovieDetailsUseCase
+import com.example.domain.useCases.CheckingIsFavorite
 import com.example.domain.useCases.GetMovieInfoUseCase
 import com.example.domain.useCases.GetMovieListUseCase
 import com.example.domain.useCases.GetReviewsUseCase
@@ -29,7 +29,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     private val getReviewsUseCase = GetReviewsUseCase(repositoryMovie)
     private val addToFavoritesUseCase = AddToFavoritesUseCase(repositoryMovie)
     private val removeFromFavoritesUseCase = RemoveFromFavoritesUseCase(repositoryMovie)
-    private val fetchFavoriteMovieDetailsUseCase = FetchFavoriteMovieDetailsUseCase(repositoryMovie)
+    private val isFavoriteUseCase = CheckingIsFavorite(repositoryMovie)
 
     val movies: Flow<State> = repositoryMovie.moviesFlow
         .filter { it.isNotEmpty() }
@@ -40,7 +40,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     val isMoviesInvoked = _isMoviesInvoked as LiveData<Boolean>
     fun loadMovieList() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 getMovieListUseCase()
                 _isMoviesInvoked.postValue(false)
             }
@@ -53,7 +53,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     val isReviewInvoked = _isReviewInvoked as LiveData<Boolean>
     fun loadReviewList(movieId: Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 getReviewsUseCase(movieId)
                 _isReviewInvoked.postValue(false)
             }
@@ -63,18 +63,20 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     val reviews: Flow<List<Review>> = repositoryMovie.reviewFlow
 
     fun addToFavorites(movieInfo: MovieInfo?) {
-        viewModelScope.launch {
-            addToFavoritesUseCase(movieInfo)
+       viewModelScope.launch {
+            withContext(Dispatchers.Default) {
+                addToFavoritesUseCase(movieInfo)
+            }
         }
     }
 
     fun removeFromFavorites(movieInfo: MovieInfo?) {
         viewModelScope.launch {
-            removeFromFavoritesUseCase(movieInfo)
+            withContext(Dispatchers.Default) {
+                removeFromFavoritesUseCase(movieInfo)
+            }
         }
     }
 
-    fun fetchMovieDetails(id: Int): LiveData<MovieInfo?> {
-       return fetchFavoriteMovieDetailsUseCase(id)
-    }
+    fun isFavorite(id: Int) = isFavoriteUseCase(id)
 }

@@ -2,7 +2,6 @@ package com.example.movies
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -66,10 +65,9 @@ class MovieDetailFragment :
                 viewModel.loadReviewList(id)
             }
         }
-        viewModel.fetchMovieDetails(id).observe(viewLifecycleOwner) {
-            (Log.d("Main", "$it"))
-            if (it?.id != null) {
-                binding.imageViewStar.setOnClickListener {view ->
+        viewModel.isFavorite(id).observe(viewLifecycleOwner) {
+            if (it) {
+                binding.imageViewStar.setOnClickListener { view ->
                     viewModel.removeFromFavorites(data)
                 }
                 binding.imageViewStar.setImageDrawable(
@@ -79,7 +77,7 @@ class MovieDetailFragment :
                     )
                 )
             } else {
-                binding.imageViewStar.setOnClickListener {view ->
+                binding.imageViewStar.setOnClickListener { view ->
                     viewModel.addToFavorites(data)
                 }
                 binding.imageViewStar.setImageDrawable(

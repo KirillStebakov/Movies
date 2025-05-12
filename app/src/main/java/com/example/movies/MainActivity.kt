@@ -18,13 +18,13 @@ class MainActivity : AppCompatActivity() {
             launchMoviesListFragment()
         }
     }
+
     private fun launchMoviesListFragment() {
         supportFragmentManager.beginTransaction()
             .replace(
                 R.id.fragment_container_movie_detail,
                 MoviesListFragment()
             )
-            .addToBackStack(null)
             .commit()
     }
 
