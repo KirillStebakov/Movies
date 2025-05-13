@@ -96,7 +96,7 @@ class MovieDetailFragment :
 
         reviewAdapter = ReviewAdapter()
         binding.rvReviewList.adapter = reviewAdapter
-        layoutManager = LinearLayoutManager(requireActivity())
+        layoutManager = LinearLayoutManager(requireContext().applicationContext)
         binding.rvReviewList.layoutManager = layoutManager
     }
 
@@ -114,4 +114,10 @@ class MovieDetailFragment :
             }
     }
 
+    override fun onDestroyView() {
+        binding.rvTrailersList.adapter = null
+        binding.rvReviewList.adapter = null
+        binding.rvReviewList.layoutManager = null
+        super.onDestroyView()
+    }
 }

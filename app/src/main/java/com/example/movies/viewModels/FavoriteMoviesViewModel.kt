@@ -30,21 +30,20 @@ class FavoriteMoviesViewModel(application: Application) : AndroidViewModel(appli
 
     private val _movieDetails = MutableLiveData<MovieInfo?>()
     val movieDetails: LiveData<MovieInfo?> = _movieDetails
-    private val _isInvoked = MutableLiveData<Boolean>(true)
-    val isInvoked: LiveData<Boolean> = _isInvoked
     fun fetchDetails(id: Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 val details = fetchFavoriteMovieDetailsUseCase(id)
-                _movieDetails.postValue(details)
-                _isInvoked.postValue(false)
+                details?.id?.let{
+                    _movieDetails.postValue(details)
+                }
             }
         }
     }
 
     fun addToFavorites(movieInfo: MovieInfo?) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 addToFavoritesUseCase(movieInfo)
             }
         }
@@ -52,7 +51,7 @@ class FavoriteMoviesViewModel(application: Application) : AndroidViewModel(appli
 
     fun removeFromFavorites(movieInfo: MovieInfo?) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 removeFromFavoritesUseCase(movieInfo)
             }
         }

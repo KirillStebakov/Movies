@@ -10,6 +10,6 @@ interface RepositoryMovie {
     suspend fun addToFavorites(movieInfo: MovieInfo?)
     suspend fun removeFromFavorites(movieInfo: MovieInfo?)
     fun fetchFavoritesList(): LiveData<List<MovieInfo?>>
-    suspend fun fetchFavoriteMovieDetails(id: Int): MovieInfo?
+    suspend fun fetchFavoriteMovieDetails(id: Int?): MovieInfo?
     fun checkingIsFavorite(id: Int): LiveData<Boolean>
 }

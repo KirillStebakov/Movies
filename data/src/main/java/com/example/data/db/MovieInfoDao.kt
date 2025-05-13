@@ -13,7 +13,7 @@ interface MovieInfoDao {
     fun getFavoriteMovieList(): LiveData<List<MovieInfoDb>>
 
     @Query("SELECT * FROM favourite_movies WHERE id == :id LIMIT 1")
-    suspend fun getFavoriteMovie(id: Int): MovieInfoDb?
+    suspend fun getFavoriteMovie(id: Int?): MovieInfoDb?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovieToFavorite(movieInfoDb: MovieInfoDb)

@@ -18,11 +18,7 @@ class FavoriteMovieDetailFragment : BaseFragment<FragmentFavoriteMovieDetailBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = parseArgs()
-        viewModel.isInvoked.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.fetchDetails(id)
-            }
-        }
+        viewModel.fetchDetails(id)
         viewModel.movieDetails.observe(viewLifecycleOwner) {
             with(binding) {
                 with(it) {

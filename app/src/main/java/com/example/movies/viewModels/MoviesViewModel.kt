@@ -40,7 +40,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     val isMoviesInvoked = _isMoviesInvoked as LiveData<Boolean>
     fun loadMovieList() {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 getMovieListUseCase()
                 _isMoviesInvoked.postValue(false)
             }
@@ -53,7 +53,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
     val isReviewInvoked = _isReviewInvoked as LiveData<Boolean>
     fun loadReviewList(movieId: Int) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 getReviewsUseCase(movieId)
                 _isReviewInvoked.postValue(false)
             }
@@ -64,7 +64,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
 
     fun addToFavorites(movieInfo: MovieInfo?) {
        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 addToFavoritesUseCase(movieInfo)
             }
         }
@@ -72,7 +72,7 @@ class MoviesViewModel(application: Application) : AndroidViewModel(application) 
 
     fun removeFromFavorites(movieInfo: MovieInfo?) {
         viewModelScope.launch {
-            withContext(Dispatchers.Default) {
+            withContext(Dispatchers.IO) {
                 removeFromFavoritesUseCase(movieInfo)
             }
         }

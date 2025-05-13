@@ -28,7 +28,7 @@ class FavoriteMoviesListFragment : BaseFragment<FragmentMoviesListBinding>
     private fun setupRecyclers() {
         adapter = MovieInfoAdapter()
         binding.rvMovieList.adapter = adapter
-        gridLayoutManager = GridLayoutManager(requireActivity(), 2)
+        gridLayoutManager = GridLayoutManager(requireContext().applicationContext, 2)
         binding.rvMovieList.layoutManager = gridLayoutManager
     }
 
@@ -40,5 +40,11 @@ class FavoriteMoviesListFragment : BaseFragment<FragmentMoviesListBinding>
             )
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onDestroyView() {
+        binding.rvMovieList.adapter = null
+        binding.rvMovieList.layoutManager = null
+        super.onDestroyView()
     }
 }
