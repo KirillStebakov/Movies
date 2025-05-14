@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 val props = Properties().apply {
@@ -48,7 +49,9 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 //    Room
-    implementation(libs.androidx.room.runtime)
+    api(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 //    Dagger
     implementation(libs.dagger)
     ksp(libs.dagger.compiler)

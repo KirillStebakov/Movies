@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class TrailersListDto(
    @SerializedName("trailers")
-   val trailers: List<TrailerDto>
+   val trailers: List<TrailerDto>?
 )

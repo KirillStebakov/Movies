@@ -4,5 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 data class ReviewListDto(
     @SerializedName("docs")
-    val review: ReviewDto
+    val reviews: List<ReviewDto>
 )
