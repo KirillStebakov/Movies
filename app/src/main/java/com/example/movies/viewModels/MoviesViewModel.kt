@@ -37,12 +37,13 @@ class MoviesViewModel @Inject constructor(
         .map { State.Content(it) as State }
         .onStart { emit(State.Loading) }
 
+    private var page = 1
     private val _isMoviesInvoked = MutableLiveData<Boolean>(true)
     val isMoviesInvoked = _isMoviesInvoked as LiveData<Boolean>
     fun loadMovieList() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                getMovieListUseCase()
+                getMovieListUseCase(page++)
                 _isMoviesInvoked.postValue(false)
             }
         }
@@ -50,13 +51,10 @@ class MoviesViewModel @Inject constructor(
 
     fun getMovieInfo(id: Int): MovieInfo? = getMovieInfoUseCase(id)
 
-    private val _isReviewInvoked = MutableLiveData<Boolean>(true)
-    val isReviewInvoked = _isReviewInvoked as LiveData<Boolean>
-    fun loadReviewList(movieId: Int) {
+    fun loadReviewList(movieId: Int, page: Int) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                getReviewsUseCase(movieId)
-                _isReviewInvoked.postValue(false)
+                getReviewsUseCase(movieId, page)
             }
         }
     }

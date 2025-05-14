@@ -10,11 +10,11 @@ interface RepositoryMovie {
 
     val reviewFlow: Flow<List<Review>>
 
-    suspend fun getMoviesList()
+    suspend fun getMoviesList(page: Int)
 
     fun getMovieInfo(id: Int): MovieInfo?
 
-    suspend fun getReviews(movieId: Int)
+    suspend fun getReviews(movieId: Int, reviewPage: Int)
 
     suspend fun addToFavorites(movieInfo: MovieInfo?)
 

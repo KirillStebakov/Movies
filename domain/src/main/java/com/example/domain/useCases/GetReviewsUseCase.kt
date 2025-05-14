@@ -4,5 +4,5 @@ import com.example.domain.RepositoryMovie
 import javax.inject.Inject
 
 class GetReviewsUseCase @Inject constructor(private val repositoryMovie: RepositoryMovie) {
-    suspend operator fun invoke(movieId: Int) = repositoryMovie.getReviews(movieId)
+    suspend operator fun invoke(movieId: Int, reviewPage: Int) = repositoryMovie.getReviews(movieId,reviewPage)
 }

@@ -4,5 +4,5 @@ import com.example.domain.RepositoryMovie
 import javax.inject.Inject
 
 class GetMovieListUseCase @Inject constructor(private val repositoryMovie: RepositoryMovie) {
-    suspend operator fun invoke() = repositoryMovie.getMoviesList()
+    suspend operator fun invoke(page: Int) = repositoryMovie.getMoviesList(page)
 }

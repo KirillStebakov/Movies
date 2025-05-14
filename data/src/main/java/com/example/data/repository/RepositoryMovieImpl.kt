@@ -19,12 +19,10 @@ class RepositoryMovieImpl @Inject constructor(
     private val apiService: ApiService
 ) : RepositoryMovie {
 
-    private var currentPage = 0
     private val _moviesState = MutableStateFlow<List<MovieInfo>>(emptyList())
     override val moviesFlow: StateFlow<List<MovieInfo>> = _moviesState.asStateFlow()
-    override suspend fun getMoviesList() {
-        val nextPage = currentPage + 1
-        val topMovies = apiService.getTopMovies(page = nextPage)
+    override suspend fun getMoviesList(page: Int) {
+        val topMovies = apiService.getTopMovies(page = page)
         val ids = mapper.mapIdListToList(topMovies)
         val newMovies = ids.map { id ->
             apiService.getMoviesInfo(id).let { mapper.mapDToToEntity(it) }
@@ -32,25 +30,22 @@ class RepositoryMovieImpl @Inject constructor(
         _moviesState.update { state ->
             (state + newMovies).distinctBy { it.id }
         }
-        currentPage = nextPage
     }
 
     override fun getMovieInfo(id: Int): MovieInfo? {
         return moviesFlow.value.find { it.id == id }
     }
 
-    private var currentReviewPage = 0
     private val _reviewsState = MutableStateFlow<List<Review>>(emptyList())
     override val reviewFlow: StateFlow<List<Review>> = _reviewsState.asStateFlow()
-    override suspend fun getReviews(movieId: Int) {
-        val nextPage = currentReviewPage + 1
-        apiService.getReviews(movieId = movieId, page = nextPage).reviews.let {rawList->
-            _reviewsState.update {state ->
-                (state+mapper.mapReviewListDtoToEntityList(rawList))
+    override suspend fun getReviews(movieId: Int, reviewPage: Int) {
+        apiService.getReviews(movieId = movieId, page = reviewPage).reviews.let { rawList ->
+            if (reviewFlow.value.any { it.movieId != movieId }) _reviewsState.value = emptyList()
+            _reviewsState.update { state ->
+                (state + mapper.mapReviewListDtoToEntityList(rawList))
                     .distinctBy { it.id }
             }
         }
-        currentReviewPage = nextPage
     }
 
     override suspend fun addToFavorites(movie: MovieInfo?) {

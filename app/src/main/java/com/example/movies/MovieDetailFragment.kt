@@ -17,6 +17,7 @@ import com.example.movies.databinding.FragmentMovieDetailBinding
 import com.example.movies.viewModels.MoviesViewModel
 import com.example.movies.viewModels.ViewModelFactory
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +29,7 @@ class MovieDetailFragment :
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var trailersAdapter: TrailersAdapter
     private lateinit var layoutManager: LinearLayoutManager
+    private var page = 1
     override fun performInjection() {
         component.inject(this)
     }
@@ -36,14 +38,8 @@ class MovieDetailFragment :
         viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[MoviesViewModel::class.java]
         val id = parseArgs()
         setupRecyclers()
-
         val data = viewModel.getMovieInfo(id)
-        viewModel.isReviewInvoked.observe(viewLifecycleOwner) {
-            if (it) {
-                viewModel.loadReviewList(id)
-            }
-        }
-
+        if (savedInstanceState != null) page = savedInstanceState.getInt(KEY) else viewModel.loadReviewList(id,page++)
         trailersAdapter.onTrailerClickListener = {
             val intent = Intent(Intent.ACTION_VIEW, it.url?.toUri())
             startActivity(intent)
@@ -59,7 +55,7 @@ class MovieDetailFragment :
         }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                viewModel.reviews.collect {
+                viewModel.reviews.collectLatest {
                     reviewAdapter.submitList(it)
                 }
             }
@@ -67,7 +63,7 @@ class MovieDetailFragment :
         binding.nestedScrollView.setOnScrollChangeListener { v: NestedScrollView, _, scrollY, _, oldScrollY ->
             val child = v.getChildAt(v.childCount - 1) ?: return@setOnScrollChangeListener
             if (scrollY >= (child.measuredHeight - v.measuredHeight) && scrollY > oldScrollY) {
-                viewModel.loadReviewList(id)
+                viewModel.loadReviewList(id, page++)
             }
         }
         viewModel.isFavorite(id).observe(viewLifecycleOwner) {
@@ -111,6 +107,7 @@ class MovieDetailFragment :
 
     companion object {
         private const val ARGS = "ARG1"
+        private const val KEY = "KEY"
         fun newInstance(id: Int?) =
             MovieDetailFragment().apply {
                 arguments = Bundle().apply {
@@ -124,5 +121,10 @@ class MovieDetailFragment :
         binding.rvReviewList.adapter = null
         binding.rvReviewList.layoutManager = null
         super.onDestroyView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(KEY, page)
     }
 }
