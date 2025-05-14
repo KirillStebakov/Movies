@@ -1,5 +1,6 @@
 package com.example.movies
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,14 @@ abstract class BaseFragment<VB : ViewBinding>(
         get() {
             return _binding ?: throw IllegalStateException("ViewBinding is null")
         }
+    protected val component by lazy {
+        (requireActivity().application as MovieApp).component
+    }
+    override fun onAttach(context: Context) {
+        performInjection()
+        super.onAttach(context)
+    }
+    protected abstract fun performInjection()
 
     override fun onCreateView(
         inflater: LayoutInflater,

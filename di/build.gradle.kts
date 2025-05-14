@@ -35,7 +35,7 @@ android {
 
 dependencies {
     implementation(project(path = ":data"))
-    implementation(project(path = ":app"))
+    implementation(project(path = ":domain"))
 
 //    Dagger
     implementation (libs.dagger)

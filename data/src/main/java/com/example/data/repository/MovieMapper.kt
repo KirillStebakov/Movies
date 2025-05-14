@@ -12,8 +12,9 @@ import com.example.domain.entity.movieInfo.Poster
 import com.example.domain.entity.movieInfo.Rating
 import com.example.domain.entity.movieInfo.Trailer
 import com.example.domain.entity.reviews.Review
+import javax.inject.Inject
 
-class MovieMapper {
+class MovieMapper @Inject constructor() {
     fun mapIdListToList(idListDto: MoviesIdListDto): List<Int> = idListDto.movieId.map { it.id }
 
     fun mapDToToEntity(dto: MovieInfoDto): MovieInfo = MovieInfo(
@@ -35,6 +36,9 @@ class MovieMapper {
         date = reviewDto.date,
         author = reviewDto.author
     )
+    fun mapReviewListDtoToEntityList(list: List<ReviewDto>): List<Review> = list.map {
+        mapReviewDtoToEntity(it)
+    }
 
     fun mapEntityToDbModel(movie: MovieInfo?): MovieInfoDb = MovieInfoDb(
         id = movie?.id,

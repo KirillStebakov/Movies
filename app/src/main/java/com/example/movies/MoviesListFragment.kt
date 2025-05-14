@@ -14,18 +14,24 @@ import com.example.movies.adapters.addOnEndlessScrollListener
 import com.example.movies.databinding.FragmentMoviesListBinding
 import com.example.movies.viewModels.MoviesViewModel
 import com.example.movies.viewModels.State
+import com.example.movies.viewModels.ViewModelFactory
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MoviesListFragment :
     BaseFragment<FragmentMoviesListBinding>(FragmentMoviesListBinding::inflate) {
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private lateinit var viewModel: MoviesViewModel
     private lateinit var adapter: MovieInfoAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
-
+    override fun performInjection() {
+        component.inject(this)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[MoviesViewModel::class.java]
         setupRecyclers()
         adapter.onMovieClickListener = {
             launchMovieDetailFragment(it.id)

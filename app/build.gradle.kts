@@ -42,6 +42,7 @@ android {
 dependencies {
     implementation(project(path = ":domain"))
     implementation(project(path = ":data"))
+    implementation(project(path = ":di"))
 
 //    LifeCycle
     implementation(libs.androidx.lifecycle.viewmodel.ktx)

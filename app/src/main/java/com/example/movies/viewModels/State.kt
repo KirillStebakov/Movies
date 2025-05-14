@@ -4,5 +4,5 @@ import com.example.domain.entity.movieInfo.MovieInfo
 
 sealed class State {
     object Loading : State()
-    data class Content(val movieList: List<MovieInfo>) : State()
+    data class Content (val movieList: List<MovieInfo>) : State()
 }

@@ -15,20 +15,25 @@ import com.example.movies.adapters.adapterReviews.ReviewAdapter
 import com.example.movies.adapters.adapterTrailers.TrailersAdapter
 import com.example.movies.databinding.FragmentMovieDetailBinding
 import com.example.movies.viewModels.MoviesViewModel
+import com.example.movies.viewModels.ViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class MovieDetailFragment :
     BaseFragment<FragmentMovieDetailBinding>(FragmentMovieDetailBinding::inflate) {
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[MoviesViewModel::class.java]
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private lateinit var viewModel: MoviesViewModel
     private lateinit var reviewAdapter: ReviewAdapter
     private lateinit var trailersAdapter: TrailersAdapter
     private lateinit var layoutManager: LinearLayoutManager
-
+    override fun performInjection() {
+        component.inject(this)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[MoviesViewModel::class.java]
         val id = parseArgs()
         setupRecyclers()
 

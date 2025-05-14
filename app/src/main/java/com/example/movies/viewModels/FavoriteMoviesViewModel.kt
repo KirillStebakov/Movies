@@ -1,28 +1,28 @@
 package com.example.movies.viewModels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.data.repository.RepositoryMovieImpl
 import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.domain.useCases.AddToFavoritesUseCase
-import com.example.domain.useCases.CheckingIsFavorite
+import com.example.domain.useCases.CheckingIsFavoriteUseCase
 import com.example.domain.useCases.FetchFavoriteMovieDetailsUseCase
 import com.example.domain.useCases.FetchFavoritesListUseCase
 import com.example.domain.useCases.RemoveFromFavoritesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class FavoriteMoviesViewModel(application: Application) : AndroidViewModel(application) {
-    private val repositoryMovie = RepositoryMovieImpl(application)
-    private val fetchFavoritesListUseCase = FetchFavoritesListUseCase(repositoryMovie)
-    private val fetchFavoriteMovieDetailsUseCase = FetchFavoriteMovieDetailsUseCase(repositoryMovie)
-    private val removeFromFavoritesUseCase = RemoveFromFavoritesUseCase(repositoryMovie)
-    private val addToFavoritesUseCase = AddToFavoritesUseCase(repositoryMovie)
-    private val isFavoriteUseCase = CheckingIsFavorite(repositoryMovie)
+class FavoriteMoviesViewModel @Inject constructor(
+    fetchFavoritesListUseCase: FetchFavoritesListUseCase,
+    private val fetchFavoriteMovieDetailsUseCase: FetchFavoriteMovieDetailsUseCase,
+    private val removeFromFavoritesUseCase: RemoveFromFavoritesUseCase,
+    private val addToFavoritesUseCase: AddToFavoritesUseCase,
+    private val isFavoriteUseCase: CheckingIsFavoriteUseCase,
+) : ViewModel() {
+
 
     val favoritesList = fetchFavoritesListUseCase()
 
@@ -34,7 +34,7 @@ class FavoriteMoviesViewModel(application: Application) : AndroidViewModel(appli
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val details = fetchFavoriteMovieDetailsUseCase(id)
-                details?.id?.let{
+                details?.id?.let {
                     _movieDetails.postValue(details)
                 }
             }

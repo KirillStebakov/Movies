@@ -7,16 +7,24 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.domain.entity.movieInfo.MovieInfo
 import com.example.movies.databinding.FragmentFavoriteMovieDetailBinding
 import com.example.movies.viewModels.FavoriteMoviesViewModel
+import com.example.movies.viewModels.ViewModelFactory
 import com.squareup.picasso.Picasso
+import javax.inject.Inject
 
 class FavoriteMovieDetailFragment : BaseFragment<FragmentFavoriteMovieDetailBinding>
     (FragmentFavoriteMovieDetailBinding::inflate) {
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[FavoriteMoviesViewModel::class.java]
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private lateinit var viewModel: FavoriteMoviesViewModel
     private var movieInfo: MovieInfo? = null
+
+    override fun performInjection() {
+        component.inject(this)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[FavoriteMoviesViewModel::class.java]
         val id = parseArgs()
         viewModel.fetchDetails(id)
         viewModel.movieDetails.observe(viewLifecycleOwner) {

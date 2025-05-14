@@ -7,15 +7,21 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.movies.adapters.adapterMovies.MovieInfoAdapter
 import com.example.movies.databinding.FragmentMoviesListBinding
 import com.example.movies.viewModels.FavoriteMoviesViewModel
+import com.example.movies.viewModels.ViewModelFactory
+import javax.inject.Inject
 
 class FavoriteMoviesListFragment : BaseFragment<FragmentMoviesListBinding>
     (FragmentMoviesListBinding::inflate) {
-    private val viewModel by lazy {
-        ViewModelProvider(requireActivity())[FavoriteMoviesViewModel::class.java]
-    }
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private lateinit var viewModel: FavoriteMoviesViewModel
     private lateinit var adapter: MovieInfoAdapter
     private lateinit var gridLayoutManager: GridLayoutManager
+    override fun performInjection() {
+        component.inject(this)
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel = ViewModelProvider(requireActivity(), viewModelFactory)[FavoriteMoviesViewModel::class.java]
         setupRecyclers()
         adapter.onMovieClickListener = {
             launchMovieDetailFragment(it.id)
